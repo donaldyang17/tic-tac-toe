@@ -2,6 +2,7 @@ let board = document.querySelectorAll("[data-cell");
 let xPlayerTurn = "x";
 let circlePlayerTurn = "circle";
 let win = document.querySelector(".winning-message");
+let restartButton = document.querySelector("button");
 
 let winCondition = [
   [0, 1, 2],
@@ -14,6 +15,7 @@ let winCondition = [
   [2, 4, 6],
 ];
 
+let turnCounter = 0;
 let currentPlayerTurnCounter = xPlayerTurn;
 
 let cell = board.forEach(function (cell) {
@@ -28,14 +30,17 @@ function placeMark(e) {
   placeMarkCurrentPlayer(cell, currentPlayerTurn);
   if (checkPlayerWin(currentPlayerTurn)) {
     endGame(win);
-    console.log(turnConverter());
+  } else if (turnCounter < 8) {
+    turnCounter++;
+    console.log(turnCounter);
+  } else {
+    endGame(win);
   }
   swapTurns();
 }
 
 function placeMarkCurrentPlayer(cell, currentPlayerTurn) {
   cell.classList.add(currentPlayerTurn);
-  console.log(cell.classList);
 }
 
 function swapTurns() {
@@ -43,10 +48,13 @@ function swapTurns() {
 }
 
 function turnConverter() {
+  if (turnCounter === 8) {
+    return "It's a tie!";
+  }
   if (currentPlayerTurnCounter === false) {
-    return circlePlayerTurn.toUpperCase();
+    return `Player ${circlePlayerTurn.toUpperCase()} Wins!`;
   } else {
-    return xPlayerTurn.toLocaleUpperCase();
+    return `Player ${xPlayerTurn.toLocaleUpperCase()} Wins!`;
   }
 }
 function checkPlayerWin(currentPlayerTurn) {
@@ -60,5 +68,11 @@ function checkPlayerWin(currentPlayerTurn) {
 function endGame(win) {
   let winningText = document.querySelector(".data-winning-message-text");
   win.classList.add("show");
-  winningText.textContent = `Player ${turnConverter()} Wins!`;
+  winningText.textContent = `${turnConverter()}`;
 }
+
+function restartGame() {
+  window.location.reload();
+}
+
+restartButton.addEventListener("click", restartGame);
